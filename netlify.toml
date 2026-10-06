@@ -1,0 +1,6 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+# Security headers and private-route noindex headers live in next.config.ts so
+# they apply to both static and server-rendered responses.

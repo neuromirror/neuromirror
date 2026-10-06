@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------- Palette ----------
+   Light: warm paper. Dark: deep charcoal (never pure black).
+   Every surface reads from these variables so both themes stay in sync. */
+:root {
+  --paper: #f6f1e7;
+  --paper-2: #efe8da;
+  --card: #fbf8f2;
+  --ink: #2a2622;
+  --ink-2: #5c554c;
+  --ink-3: #8a8174;
+  --line: #e2d9c8;
+  --line-2: #d4c8b3;
+  --accent: #3f5f55;
+  --accent-ink: #f7f3ea;
+  --accent-soft: #e3e9e1;
+  --clay: #a5583a;
+  --clay-soft: #f2e0d4;
+  --amber: #9a6a1c;
+  --amber-soft: #f3e7cc;
+  --mark: #f4e3a6;
+  --shadow: 0 1px 0 rgba(60, 45, 25, 0.04), 0 8px 24px -12px rgba(60, 45, 25, 0.18);
+  color-scheme: light;
+}
+
+.dark {
+  --paper: #1c1b19;
+  --paper-2: #232220;
+  --card: #262522;
+  --ink: #ece6da;
+  --ink-2: #b9b1a3;
+  --ink-3: #8b8477;
+  --line: #34322e;
+  --line-2: #45423c;
+  --accent: #9dbcae;
+  --accent-ink: #1a1c1a;
+  --accent-soft: #2c3632;
+  --clay: #e09a7a;
+  --clay-soft: #3a2a23;
+  --amber: #dcb468;
+  --amber-soft: #352d1f;
+  --mark: #5b4d22;
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 10px 28px -14px rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-clay: var(--clay);
+  --color-clay-soft: var(--clay-soft);
+  --color-amber: var(--amber);
+  --color-amber-soft: var(--amber-soft);
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-serif: var(--font-newsreader), Georgia, serif;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --shadow-soft: var(--shadow);
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--paper);
+}
+
+/* Faint paper grain on a fixed, non-interactive layer. */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0 0.2 0 0 0 0.05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.dark .grain::before {
+  opacity: 0.18;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--mark);
+  color: var(--ink);
+}
+
+/* ---------- Motion (subtle, and off for reduced-motion users) ---------- */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.rise { animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.rise-1 { animation-delay: 60ms; }
+.rise-2 { animation-delay: 120ms; }
+.rise-3 { animation-delay: 180ms; }
+.rise-4 { animation-delay: 240ms; }
+
+@keyframes shimmer {
+  0% { opacity: 0.55; }
+  50% { opacity: 1; }
+  100% { opacity: 0.55; }
+}
+.skeleton {
+  background: var(--paper-2);
+  border-radius: 6px;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Writing surface (Tiptap / ProseMirror) ---------- */
+.prose-journal {
+  font-family: var(--font-serif);
+  font-size: 1.1875rem;
+  line-height: 1.75;
+  color: var(--ink);
+  outline: none;
+  min-height: 50vh;
+}
+.prose-journal > * + * { margin-top: 0.85em; }
+.prose-journal h1, .prose-journal h2, .prose-journal h3 {
+  font-family: var(--font-display);
+  line-height: 1.25;
+  font-weight: 500;
+  margin-top: 1.4em;
+}
+.prose-journal h1 { font-size: 1.75rem; }
+.prose-journal h2 { font-size: 1.4rem; }
+.prose-journal h3 { font-size: 1.2rem; }
+.prose-journal ul { list-style: disc; padding-left: 1.4em; }
+.prose-journal ol { list-style: decimal; padding-left: 1.4em; }
+.prose-journal li > p { margin: 0; }
+.prose-journal blockquote {
+  border-left: 2px solid var(--line-2);
+  padding-left: 1em;
+  color: var(--ink-2);
+  font-style: italic;
+}
+.prose-journal a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.prose-journal mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 2px; }
+.prose-journal img { max-width: 100%; border-radius: 6px; border: 1px solid var(--line); }
+.prose-journal hr { border: 0; border-top: 1px solid var(--line); margin: 2em 0; }
+.prose-journal ul[data-type="taskList"] { list-style: none; padding-left: 0.2em; }
+.prose-journal ul[data-type="taskList"] li { display: flex; gap: 0.6em; align-items: flex-start; }
+.prose-journal ul[data-type="taskList"] li > label { margin-top: 0.3em; }
+.prose-journal ul[data-type="taskList"] li > label input { accent-color: var(--accent); width: 1rem; height: 1rem; }
+.prose-journal ul[data-type="taskList"] li[data-checked="true"] > div { color: var(--ink-3); text-decoration: line-through; }
+.prose-journal table { border-collapse: collapse; width: 100%; font-size: 0.95em; table-layout: fixed; overflow: hidden; }
+.prose-journal td, .prose-journal th { border: 1px solid var(--line-2); padding: 0.4em 0.6em; vertical-align: top; position: relative; }
+.prose-journal th { background: var(--paper-2); font-weight: 600; text-align: left; }
+.prose-journal .selectedCell::after { content: ""; position: absolute; inset: 0; background: var(--accent-soft); opacity: 0.5; pointer-events: none; }
+.prose-journal .tableWrapper { overflow-x: auto; }
+.prose-journal p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--ink-3);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

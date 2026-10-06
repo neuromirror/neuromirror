@@ -1,0 +1,4 @@
+project_id = "wnymtskjnmuzuaqdrewc"
+
+[functions.cognitive-analysis]
+verify_jwt = true
