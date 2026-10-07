@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 type Mode = "signin" | "signup" | "forgot" | "reset";
@@ -20,6 +20,21 @@ export function AuthForm({ mode }: { mode: Mode }) {
   const [error, setError] = useState<string | null>(null); const [message, setMessage] = useState<string | null>(null); const [busy, setBusy] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const c = COPY[mode];
+
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const fragment = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const errorCode = query.get("error_code") ?? fragment.get("error_code");
+    const errorType = query.get("error") ?? fragment.get("error");
+
+    if ((mode === "forgot" || mode === "reset") && (errorCode === "otp_expired" || errorType === "reset-link-expired")) {
+      setError(mode === "forgot"
+        ? "That password reset link has expired or was already used. Enter your email below to request a fresh link."
+        : "That password reset link has expired or was already used. Return to sign-in and choose Forgot password to request a fresh link.");
+    } else if (mode === "signin" && errorType === "oauth-failed") {
+      setError("Google sign-in could not be completed. Please try again.");
+    }
+  }, [mode]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault(); setError(null); setMessage(null);
@@ -38,7 +53,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
         if (data.session) { router.replace("/home"); router.refresh(); }
         else setMessage("No sign-in session was returned. This email may already have an account, or Confirm email is still enabled in Supabase. For immediate sign-in after signup, turn off Confirm email under Authentication → Sign In / Providers → Email. Existing users can sign in or reset their password.");
       } else if (mode === "forgot") {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/reset-password` });
+        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/auth/callback?next=%2Freset-password` });
         if (error) throw error;
         setMessage("If an account exists for that email, a reset link is on its way.");
       } else {
