@@ -53,7 +53,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
         if (data.session) { router.replace("/home"); router.refresh(); }
         else setMessage("No sign-in session was returned. This email may already have an account, or Confirm email is still enabled in Supabase. For immediate sign-in after signup, turn off Confirm email under Authentication → Sign In / Providers → Email. Existing users can sign in or reset their password.");
       } else if (mode === "forgot") {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/auth/callback?next=%2Freset-password` });
+        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/auth/reset-callback` });
         if (error) throw error;
         setMessage("If an account exists for that email, a reset link is on its way.");
       } else {
@@ -82,7 +82,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
   async function signInWithGoogle() {
     setError(null); setBusy(true);
     try {
-      const { error } = await createClient().auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${location.origin}/auth/callback?next=/home` } });
+      const { error } = await createClient().auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${location.origin}/auth/callback` } });
       if (error) throw error;
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Google sign-in could not start. Please try again.");
