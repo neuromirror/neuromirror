@@ -11,7 +11,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "What is a digital journal?",
-    a: "A digital journal is a journal you keep on a computer or phone instead of paper. Entries can be searched, tagged, organized, and backed up, which makes it easier to find and revisit what you wrote years later.",
+    a: "A digital journal is a journal you keep on a computer or phone instead of paper. Entries can be searched and organized in your account, which makes it easier to revisit what you wrote later.",
   },
   {
     q: "Is NeuroMirror a medical diagnostic tool?",
@@ -47,11 +47,11 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Can I search old journals?",
-    a: "Yes. Normal search finds exact titles, tags, and words. Memory Vault lets you describe a memory in your own words, for example “when did I write about being nervous before my exams?”, and finds the matching entries.",
+    a: "Yes. Normal search finds titles, tags, and words. Memory Vault currently previews entries that match words in your query; meaning-based search for entries described in different words is not available yet.",
   },
   {
     q: "What is Memory Vault?",
-    a: "Memory Vault is NeuroMirror’s memory discovery space. It includes natural-language search over your own journals, filters, a memory timeline, On This Day, and saved memories. Results always link to real entries you wrote, with the real date and an excerpt taken directly from your text. If nothing matches, it says so instead of guessing.",
+    a: "Memory Vault is NeuroMirror’s memory organization space. It includes a keyword-based search preview, filters, a memory timeline, On This Day, and saved memories. Search results link to real entries you wrote, with the real date and an excerpt taken from your text. Meaning-based search is not available yet.",
   },
   {
     q: "Does NeuroMirror analyze my writing?",
@@ -75,10 +75,11 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Can I delete my data?",
-    a: "Yes. You can delete individual journals and notes, export your data, or permanently delete your account and its associated personal data from Settings.",
+    a: "You can delete individual journals and notes in the app. Account-wide deletion is not currently available in Settings; contact the site owner to request account removal. Data export is not currently available.",
   },
   {
     q: "Is NeuroMirror free?",
     a: "Yes. NeuroMirror is currently free to use. It may in future be supported by clearly separated, non-intrusive ads that never appear inside your writing. There is no subscription or paywall.",
   },
 ];
+

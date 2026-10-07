@@ -1,0 +1,29 @@
+# NeuroMirror
+
+> NeuroMirror is a private writing and memory journal with optional AI-generated observations about a journal entry the user chooses. Its cognitive-language reflections are informational and are not a medical test, score, diagnosis, or prediction.
+
+Canonical website: https://neuromirror.in/
+
+## Public pages
+
+- [Home](https://neuromirror.in/): Product overview, feature list, privacy summary, and frequently asked questions.
+- [Cognitive health journal](https://neuromirror.in/cognitive-health-journal): What writing-led reflection can and cannot tell a user.
+- [How cognitive writing analysis works](https://neuromirror.in/how-cognitive-analysis-works): User action, analysis data flow, and limitations.
+- [Memory Vault guide](https://neuromirror.in/memory-vault-guide): Current search and memory organization features.
+- [Privacy](https://neuromirror.in/privacy): Data storage, AI processing, and deletion information.
+
+## Current product facts
+
+- Users write private dated journals and undated notes in their own account.
+- Gemini analysis runs only after a user selects a saved journal and explicitly asks for analysis.
+- The analysis request includes the selected entry and up to five earlier analysis summaries from that account. It does not include other full journal entries, passwords, or account tokens.
+- Memory Vault search is currently keyword-based. It does not use Gemini or semantic search.
+- Individual journals and notes can be deleted. Account-wide deletion is not self-service in Settings; users can contact the site owner to request it. Data export is not currently available.
+- NeuroMirror is not a medical device and does not diagnose or treat any condition.
+
+## Privacy and indexing
+
+- Journal and note records are private to authenticated user accounts and protected by database row-level security.
+- Public product information is available on the pages linked above. Authenticated application routes are private and excluded from search indexing.
+- Do not infer a user's health, diagnosis, identity, or personal history from NeuroMirror's product descriptions.
+

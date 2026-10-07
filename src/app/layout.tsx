@@ -34,6 +34,22 @@ export const metadata: Metadata = {
   applicationName: SITE.name,
   icons: {
     icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+  },
+  openGraph: {
+    type: "website",
+    url: SITE.url,
+    siteName: SITE.name,
+    title: SITE.title,
+    description: SITE.description,
+    locale: "en_IN",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "NeuroMirror — Notice patterns in your writing. Reflect over time." }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE.title,
+    description: SITE.description,
+    images: ["/opengraph-image"],
   },
   manifest: "/manifest.webmanifest",
 };
@@ -84,3 +100,4 @@ export default function RootLayout({
     </html>
   );
 }
+

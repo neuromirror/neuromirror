@@ -11,17 +11,6 @@ export const metadata: Metadata = {
   title: { absolute: SITE.title },
   description: SITE.description,
   alternates: { canonical: "/" },
-  keywords: [
-    "digital journal",
-    "private journal",
-    "online journaling",
-    "personal memory journal",
-    "journal app",
-    "digital diary",
-    "self reflection journal",
-    "personal memory archive",
-    "cognitive awareness",
-  ],
   openGraph: {
     type: "website",
     url: SITE.url,
@@ -30,14 +19,14 @@ export const metadata: Metadata = {
     description: SITE.description,
     locale: "en_IN",
   },
-  twitter: { card: "summary", title: SITE.title, description: SITE.description },
+  twitter: { card: "summary_large_image", title: SITE.title, description: SITE.description, images: ["/opengraph-image"] },
   robots: { index: true, follow: true },
 };
 
 const STEPS = [
   { n: "01", title: "Write", body: "Write a dated journal or capture a quick note. Autosave keeps every word." },
   { n: "02", title: "Organize", body: "Use dates, tags, notebooks, favorites, and a calendar that follows your journals." },
-  { n: "03", title: "Remember", body: "Ask Memory Vault in your own words and rediscover something you wrote long ago." },
+  { n: "03", title: "Remember", body: "Search by a word or phrase, then revisit matching entries from your own journals." },
   { n: "04", title: "Track patterns", body: "Compare requested writing observations over time, with no scores or diagnoses." },
 ];
 
@@ -45,7 +34,7 @@ const AUDIENCE = [
   { title: "Regular journal writers", body: "You already write and want better organization and a way to find old entries." },
   { title: "People moving from paper", body: "You want a private digital notebook that is searchable and does not get lost." },
   { title: "Self-reflectors", body: "You want to notice recurring themes and how your thinking changes over the years." },
-  { title: "Memory keepers", body: "You want to preserve meaningful moments and find them again with a simple question." },
+  { title: "Memory keepers", body: "You want to preserve meaningful moments and find them again with dates, filters, and keyword search." },
   { title: "Older adults and families", body: "You want a long-term written record of personal memories and everyday life." },
   { title: "Caregivers, with permission", body: "Organized writing over time can help support conversations about cognitive changes." },
 ];
@@ -55,6 +44,7 @@ function JsonLd() {
     {
       "@context": "https://schema.org",
       "@type": "Organization",
+      "@id": SITE.url + "/#organization",
       name: SITE.name,
       url: SITE.url,
       logo: `${SITE.url}/favicon.svg`,
@@ -62,19 +52,29 @@ function JsonLd() {
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
+      "@id": SITE.url + "/#website",
       name: SITE.name,
       url: SITE.url,
       description: SITE.description,
+      publisher: { "@id": SITE.url + "/#organization" },
     },
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
+      "@id": SITE.url + "/#software",
       name: SITE.name,
       applicationCategory: "LifestyleApplication",
       operatingSystem: "Web",
       url: SITE.url,
       description:
-        "A private digital journal with dated journals, notes with optional deadlines, a journal calendar, natural-language memory search (Memory Vault), optional AI reflections, and non-diagnostic cognitive-language insights.",
+        "A private digital journal with dated journals, notes, a calendar, keyword-based Memory Vault search preview, optional user-requested Gemini writing reflections, and informational non-diagnostic cognitive-language observations.",
+      featureList: [
+        "Private dated journals and notes",
+        "Journal calendar, tags, notebooks, and favorites",
+        "Keyword-based Memory Vault search preview",
+        "Optional, user-requested Gemini writing analysis",
+        "Informational cognitive-language observations with no scores or diagnoses",
+      ],
       isAccessibleForFree: true,
     },
     {
@@ -218,6 +218,30 @@ export default function Landing() {
           </ol>
         </section>
 
+        <section aria-labelledby="guides-h" className="border-y border-line bg-paper-2/60">
+          <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8">
+            <p className="text-xs uppercase tracking-[0.22em] text-ink-3">Learn more</p>
+            <h2 id="guides-h" className="mt-4 font-display text-4xl text-ink">How the main features work</h2>
+            <div className="mt-10 grid gap-5 md:grid-cols-3">
+              <Link href="/cognitive-health-journal" className="rounded-lg border border-line bg-card p-6 transition-colors hover:bg-paper">
+                <h3 className="font-display text-xl text-ink">Cognitive health journaling</h3>
+                <p className="mt-3 text-sm leading-relaxed text-ink-2">What a writing-led journal can help you record, and what its reflections cannot tell you.</p>
+                <span className="mt-5 inline-block text-sm text-accent underline underline-offset-4">Read the guide</span>
+              </Link>
+              <Link href="/how-cognitive-analysis-works" className="rounded-lg border border-line bg-card p-6 transition-colors hover:bg-paper">
+                <h3 className="font-display text-xl text-ink">How analysis works</h3>
+                <p className="mt-3 text-sm leading-relaxed text-ink-2">See what happens when you ask Gemini to reflect on one selected journal entry.</p>
+                <span className="mt-5 inline-block text-sm text-accent underline underline-offset-4">Read the method</span>
+              </Link>
+              <Link href="/memory-vault-guide" className="rounded-lg border border-line bg-card p-6 transition-colors hover:bg-paper">
+                <h3 className="font-display text-xl text-ink">Memory Vault</h3>
+                <p className="mt-3 text-sm leading-relaxed text-ink-2">Learn about keyword search, filters, the timeline, and saved memories.</p>
+                <span className="mt-5 inline-block text-sm text-accent underline underline-offset-4">Explore the guide</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Memory Vault explainer */}
         <section aria-labelledby="vault-h" className="mx-auto max-w-6xl px-5 pb-24 sm:px-8">
           <div className="grid gap-10 rounded-lg border border-line bg-card p-8 shadow-soft sm:p-12 lg:grid-cols-2">
@@ -227,14 +251,14 @@ export default function Landing() {
                 What is Memory Vault?
               </h2>
               <p className="mt-5 font-serif text-lg leading-relaxed text-ink-2">
-                Memory Vault is where you find things you wrote before, without remembering the exact words. Ask a question like
-                you would ask a friend, and it looks only through <em>your own</em> journals.
+              Memory Vault helps you organize and revisit your own writing. Its current search preview matches words in your
+              query against your entries; it does not yet understand a memory described with different words.
               </p>
             </div>
             <ul className="space-y-4 text-[0.95rem] leading-relaxed text-ink-2">
               <li><strong className="font-medium text-ink">Real entries only.</strong> Every result links to a journal you wrote, with its real date and an excerpt quoted from your text.</li>
               <li><strong className="font-medium text-ink">Honest when empty.</strong> If nothing matches, it says “I couldn’t find a matching memory in your journals.”</li>
-              <li><strong className="font-medium text-ink">Minimal AI context.</strong> Your journals are narrowed down first. Only a few candidate entries are sent to the AI to rank.</li>
+              <li><strong className="font-medium text-ink">Your writing stays yours.</strong> Memory Vault search does not send journal text to Gemini or another AI service.</li>
               <li><strong className="font-medium text-ink">More ways to remember.</strong> Filters, a memory timeline, On This Day, and saved memories.</li>
             </ul>
           </div>
@@ -269,7 +293,7 @@ export default function Landing() {
               <li>Journals and notes are private to your account, protected by authenticated access and database-level security rules.</li>
               <li>There are no public journal pages, and private pages are never indexed by search engines.</li>
               <li>AI runs only when you ask, from our server, with only the text the feature needs.</li>
-              <li>You can export your data or permanently delete your account at any time.</li>
+              <li>You can delete individual journals and notes. Account-wide deletion is not self-service yet; see the <Link href="/privacy" className="underline underline-offset-4">privacy page</Link> to request account removal. Data export is not available yet.</li>
             </ul>
           </div>
           <div className="rounded-lg border border-line p-8">
@@ -329,3 +353,4 @@ export default function Landing() {
     </>
   );
 }
+
