@@ -185,7 +185,7 @@ export default function Landing() {
                 {[
                   [NotebookPen, "Journals with dates, and notes without them"],
                   [CalendarDays, "A calendar driven by your journal dates"],
-                  [Search, "Memory Vault: search your memories in plain language"],
+                  [Search, "Memory Vault: find past writing with keyword search"],
                   [Sparkles, "Optional AI reflection that never overwrites you"],
                 ].map(([Icon, text]) => {
                   const I = Icon as typeof Search;
