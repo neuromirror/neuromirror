@@ -16,8 +16,9 @@ export default function Page() {
   async function analyze() {
     setBusy(true); setError(""); setAnalysis(null);
     try {
-      const response = await fetch("/api/analysis", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ journalId: selected }) });
-      const data = await response.json(); if (!response.ok) throw new Error(data.error || "Analysis failed.");
+      const { data, error: invokeError } = await createClient().functions.invoke("cognitive-analysis", { body: { journalId: selected } });
+      if (invokeError) throw new Error("Cloudflare could not complete this analysis. Please retry shortly.");
+      if (!data || typeof data.analysis?.summary !== "string") throw new Error(data?.error || "The analysis response could not be validated. Please retry.");
       setAnalysis(data.analysis);
       const result = await createClient().from("cognitive_insights").select("id,created_at,analysis,journals(title,journal_date)").order("created_at", { ascending: false }).limit(12);
       if (result.data) setHistory(result.data as unknown as Saved[]);
@@ -29,7 +30,7 @@ export default function Page() {
       <p className="mt-4 max-w-2xl text-sm leading-6 text-ink-2">Build a personal history of writing patterns over time. Each report uses the journal you select and can compare it with up to five earlier analysis summaries. These are informational reflections, not a medical assessment; changes in writing have many causes.</p>
     <section className="mt-8 rounded-lg border border-line bg-card p-5 sm:p-6">
       <h2 className="font-display text-xl text-ink">Analyze a journal</h2>
-      <p className="mt-1 text-sm text-ink-3">When you ask, the selected entry and up to five of your earlier saved analysis summaries are sent to Gemini. Other journal entries are not included. Autosave never runs analysis.</p>
+      <p className="mt-1 text-sm text-ink-3">When you ask, the selected entry and up to five of your earlier saved analysis summaries are sent to Cloudflare AI. Other journal entries are not included. Autosave never runs analysis.</p>
       <div className="mt-4 flex flex-col gap-3 sm:flex-row">
         <select value={selected} onChange={e => setSelected(e.target.value)} className="min-w-0 flex-1 rounded-md border border-line-2 bg-paper px-3 py-3 text-sm text-ink">
           <option value="">Choose one of your journals</option>{journals.map(j => <option key={j.id} value={j.id}>{j.journalDate} · {j.title || "Untitled journal"}</option>)}

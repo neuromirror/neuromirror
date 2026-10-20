@@ -4,14 +4,15 @@ import { Logo } from "@/components/logo";
 
 export const metadata: Metadata = {
   title: "Privacy",
-  description: "How NeuroMirror protects personal writing and when a requested Gemini analysis uses a journal entry.",
+  description: "How NeuroMirror protects personal writing and when a requested Cloudflare AI analysis uses a journal entry.",
   alternates: { canonical: "/privacy" },
 };
 
 const SECTIONS = [
   ["Your account owns your data", "Journals, notes, notebooks, saved memories, cognitive analyses, and game results are stored in Supabase and protected by row-level security. Each account can access only its own records. Reports are calculated from your records and are not stored as separate files."],
   ["No public writing", "NeuroMirror has no public journal pages. Private application pages are protected by sign-in and marked so search engines do not index them. Your writing is never placed in page metadata."],
-  ["How AI uses your text", "Gemini analysis runs only when you choose a journal and ask for analysis. The selected entry and up to five prior analysis summaries from your account are sent from a protected Supabase Edge Function to Gemini. Other journal entries are not sent. Autosave and Memory Vault search do not send writing to AI. Passwords and account tokens are not included."],
+  ["How AI uses your text", "Cloudflare Workers AI analysis runs only when you choose a journal and ask for analysis. The selected entry and up to five prior analysis summaries from your account are sent from the authenticated app server to Cloudflare for inference. Other journal entries are not sent. Autosave and Memory Vault search do not send writing to an AI provider. Passwords and account tokens are not sent to the model. Analyses are saved to your account in Supabase."],
+  ["Voice transcription", "If you choose to request transcription, the selected audio recording is sent securely to Cloudflare's Whisper transcription model. NeuroMirror does not save the audio. The returned text is an editable draft; it is added to your dated journal only after you review it and explicitly choose to save. NeuroMirror does not analyze vocal tone or voice characteristics."],
   ["Cognitive-language insights", "Insights are informational observations about writing patterns. They are not a diagnosis, never show a medical probability, and should not replace evaluation by a qualified professional."],
   ["Analytics", "If product analytics are used, they are aggregated and never include journal text, note text, Memory Vault queries, or insight content."],
   ["Deleting records", "You can delete individual journals and notes in the app. Account-wide deletion is not currently available in Settings; contact the site owner to request account removal. Data export is not currently available."],
@@ -41,4 +42,3 @@ export default function Privacy() {
     </div>
   );
 }
-

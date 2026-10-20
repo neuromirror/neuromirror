@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
-  Archive, BookOpen, CalendarDays, Ellipsis, FileText, Gamepad2, House, LogOut, Settings, Sparkles, X,
+  Archive, BookOpen, CalendarDays, Ellipsis, FileText, Gamepad2, House, LogOut, Settings, Sparkles, X, Mic,
 } from "lucide-react";
 import { Logo } from "./logo";
 import { ThemeSwitch } from "./theme-switch";
@@ -17,6 +17,7 @@ export const NAV = [
   { href: "/calendar", label: "Calendar", Icon: CalendarDays },
   { href: "/memory-vault", label: "Memory Vault", Icon: Archive },
   { href: "/insights", label: "Insights", Icon: Sparkles },
+  { href: "/voice", label: "Voice journal", Icon: Mic },
   { href: "/games", label: "Cognitive Games", Icon: Gamepad2 },
   { href: "/reports", label: "Reports", Icon: FileText },
   { href: "/settings", label: "Settings", Icon: Settings },

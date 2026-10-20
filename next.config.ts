@@ -1,4 +1,8 @@
 import type { NextConfig } from "next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+
+// Expose Wrangler bindings while using `next dev` locally.
+if (process.env.NODE_ENV === "development") void initOpenNextCloudflareForDev();
 
 // Inline scripts/styles are required by Next.js hydration and the pre-paint
 // theme script. connect-src allows https for the auth/database provider.
@@ -21,13 +25,13 @@ const SECURITY_HEADERS = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(self), geolocation=(), interest-cohort=()" },
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
 ];
 
 const PRIVATE_ROUTES = [
   "/home", "/writing", "/writing/:path*", "/calendar", "/memory-vault", "/insights",
-  "/games", "/reports", "/settings", "/signin", "/signup", "/forgot-password", "/reset-password",
+  "/games", "/reports", "/settings", "/voice", "/signin", "/signup", "/forgot-password", "/reset-password",
 ];
 
 const nextConfig: NextConfig = {

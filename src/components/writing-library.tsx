@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Folder, NotebookPen, Search, StickyNote } from "lucide-react";
+import { Folder, NotebookPen, Pencil, Plus, Search, StickyNote, Trash2 } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { htmlToText } from "@/lib/text";
 import type { Entry } from "@/lib/types";
@@ -25,6 +25,10 @@ export function WritingLibrary({ view, tag, notebook }: { view: WritingView; tag
   const { ready, today, journals, notes, notebooks } = useStore();
   const [q, setQ] = useState("");
   const [limit, setLimit] = useState(PAGE);
+  const [notebookName, setNotebookName] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState("");
+  const { createNotebook, renameNotebook, deleteNotebook } = useStore();
 
   const all: Entry[] = useMemo(() => [...journals, ...notes], [journals, notes]);
 
@@ -107,20 +111,28 @@ export function WritingLibrary({ view, tag, notebook }: { view: WritingView; tag
 
       {view === "notebooks" && !notebook && (
         <section className="mt-8">
+          <form className="mb-5 flex flex-col gap-2 sm:flex-row" onSubmit={async (e) => { e.preventDefault(); setBusy(true); setNotice(""); try { await createNotebook(notebookName); setNotebookName(""); } catch (error) { setNotice(error instanceof Error ? error.message : "Could not create notebook."); } finally { setBusy(false); } }}>
+            <label className="sr-only" htmlFor="new-notebook">New notebook name</label><input id="new-notebook" maxLength={80} required value={notebookName} onChange={(e) => setNotebookName(e.target.value)} placeholder="Name a notebook" className="min-w-0 flex-1 rounded-md border border-line-2 bg-card px-3 py-2.5 text-sm text-ink" />
+            <button disabled={busy} className={btnPrimary}><Plus className="h-4 w-4" /> Create notebook</button>
+          </form>
+          {notice && <p role="alert" className="mb-4 text-sm text-clay">{notice}</p>}
           {!ready ? <ListSkeleton rows={2} /> : (
             <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {notebooks.map((nb) => {
                 const n = all.filter((e) => e.notebookId === nb.id && !e.archived).length;
                 return (
                   <li key={nb.id}>
-                    <Link href={`/writing?view=notebooks&notebook=${nb.id}`}
-                      className="flex items-center gap-4 rounded-lg border border-line bg-card px-5 py-5 transition hover:border-line-2">
+                    <div className="flex items-center gap-3 rounded-lg border border-line bg-card px-5 py-5 transition hover:border-line-2">
+                    <Link href={`/writing?view=notebooks&notebook=${nb.id}`} className="flex min-w-0 flex-1 items-center gap-4">
                       <Folder className="h-5 w-5 text-accent" aria-hidden />
                       <span className="flex-1">
                         <span className="block font-display text-lg text-ink">{nb.name}</span>
                         <span className="text-xs text-ink-3">{n} entr{n === 1 ? "y" : "ies"}</span>
                       </span>
                     </Link>
+                    <button type="button" title="Rename notebook" aria-label={`Rename ${nb.name}`} onClick={async () => { const name = window.prompt("Rename notebook", nb.name); if (name === null) return; setNotice(""); try { await renameNotebook(nb.id, name); } catch (error) { setNotice(error instanceof Error ? error.message : "Could not rename notebook."); } }} className="grid h-9 w-9 place-items-center rounded-md text-ink-3 hover:bg-paper-2 hover:text-ink"><Pencil className="h-4 w-4" /></button>
+                    <button type="button" title="Delete notebook" aria-label={`Delete ${nb.name}`} onClick={async () => { if (!window.confirm(`Delete “${nb.name}”? Its journals and notes will be kept without a notebook.`)) return; setNotice(""); try { await deleteNotebook(nb.id); } catch (error) { setNotice(error instanceof Error ? error.message : "Could not delete notebook."); } }} className="grid h-9 w-9 place-items-center rounded-md text-ink-3 hover:bg-clay-soft hover:text-clay"><Trash2 className="h-4 w-4" /></button>
+                    </div>
                   </li>
                 );
               })}

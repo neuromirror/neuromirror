@@ -67,12 +67,12 @@ function JsonLd() {
       operatingSystem: "Web",
       url: SITE.url,
       description:
-        "A private digital journal with dated journals, notes, a calendar, keyword-based Memory Vault search preview, optional user-requested Gemini writing reflections, and informational non-diagnostic cognitive-language observations.",
+        "A private digital journal with dated journals, notes, a calendar, keyword-based Memory Vault search preview, optional user-requested Cloudflare AI writing reflections, and informational non-diagnostic cognitive-language observations.",
       featureList: [
         "Private dated journals and notes",
         "Journal calendar, tags, notebooks, and favorites",
         "Keyword-based Memory Vault search preview",
-        "Optional, user-requested Gemini writing analysis",
+        "Optional, user-requested Cloudflare AI writing analysis",
         "Informational cognitive-language observations with no scores or diagnoses",
       ],
       isAccessibleForFree: true,
@@ -230,7 +230,7 @@ export default function Landing() {
               </Link>
               <Link href="/how-cognitive-analysis-works" className="rounded-lg border border-line bg-card p-6 transition-colors hover:bg-paper">
                 <h3 className="font-display text-xl text-ink">How analysis works</h3>
-                <p className="mt-3 text-sm leading-relaxed text-ink-2">See what happens when you ask Gemini to reflect on one selected journal entry.</p>
+                <p className="mt-3 text-sm leading-relaxed text-ink-2">See what happens when you ask Cloudflare AI to reflect on one selected journal entry.</p>
                 <span className="mt-5 inline-block text-sm text-accent underline underline-offset-4">Read the method</span>
               </Link>
               <Link href="/memory-vault-guide" className="rounded-lg border border-line bg-card p-6 transition-colors hover:bg-paper">
@@ -258,7 +258,7 @@ export default function Landing() {
             <ul className="space-y-4 text-[0.95rem] leading-relaxed text-ink-2">
               <li><strong className="font-medium text-ink">Real entries only.</strong> Every result links to a journal you wrote, with its real date and an excerpt quoted from your text.</li>
               <li><strong className="font-medium text-ink">Honest when empty.</strong> If nothing matches, it says “I couldn’t find a matching memory in your journals.”</li>
-              <li><strong className="font-medium text-ink">Your writing stays yours.</strong> Memory Vault search does not send journal text to Gemini or another AI service.</li>
+              <li><strong className="font-medium text-ink">Your writing stays yours.</strong> Memory Vault search does not send journal text to an AI service.</li>
               <li><strong className="font-medium text-ink">More ways to remember.</strong> Filters, a memory timeline, On This Day, and saved memories.</li>
             </ul>
           </div>
@@ -302,7 +302,7 @@ export default function Landing() {
               <li>It is not a medical device and does not diagnose dementia or any condition.</li>
               <li>Cognitive-language insights are informational observations, never probabilities or verdicts.</li>
               <li>Ordinary changes in writing are normal and do not by themselves indicate illness.</li>
-              <li>Voice analysis is coming soon and is not available yet.</li>
+              <li>Voice journaling supports optional transcription; voice-quality analysis is unavailable. Recordings are not retained, and transcripts require your review before saving.</li>
             </ul>
           </div>
         </section>
@@ -353,4 +353,3 @@ export default function Landing() {
     </>
   );
 }
-

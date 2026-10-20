@@ -2,3 +2,6 @@ project_id = "wnymtskjnmuzuaqdrewc"
 
 [functions.cognitive-analysis]
 verify_jwt = true
+
+[functions.voice-transcription]
+verify_jwt = true

@@ -15,9 +15,11 @@ Canonical website: https://neuromirror.in/
 ## Current product facts
 
 - Users write private dated journals and undated notes in their own account.
-- Gemini analysis runs only after a user selects a saved journal and explicitly asks for analysis.
+- Cloudflare Workers AI analysis runs only after a user selects a saved journal and explicitly asks for analysis.
+- Voice journaling can transcribe an explicit user recording through Cloudflare Whisper. NeuroMirror does not retain the audio; the transcript must be reviewed and edited before the user chooses to save it as a dated journal.
+- Voice-quality, tone, emotion, and health analysis are unavailable.
 - The analysis request includes the selected entry and up to five earlier analysis summaries from that account. It does not include other full journal entries, passwords, or account tokens.
-- Memory Vault search is currently keyword-based. It does not use Gemini or semantic search.
+- Memory Vault search is currently keyword-based. It does not send journal text to an AI provider or use semantic search.
 - Individual journals and notes can be deleted. Account-wide deletion is not self-service in Settings; users can contact the site owner to request it. Data export is not currently available.
 - NeuroMirror is not a medical device and does not diagnose or treat any condition.
 
@@ -26,4 +28,3 @@ Canonical website: https://neuromirror.in/
 - Journal and note records are private to authenticated user accounts and protected by database row-level security.
 - Public product information is available on the pages linked above. Authenticated application routes are private and excluded from search indexing.
 - Do not infer a user's health, diagnosis, identity, or personal history from NeuroMirror's product descriptions.
-

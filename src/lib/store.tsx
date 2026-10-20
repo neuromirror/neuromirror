@@ -12,6 +12,9 @@ interface Store {
   journals: Journal[];
   notes: Note[];
   notebooks: Notebook[];
+  createNotebook: (name: string) => Promise<void>;
+  renameNotebook: (id: string, name: string) => Promise<void>;
+  deleteNotebook: (id: string) => Promise<void>;
   saveJournal: (j: Journal) => Promise<void>;
   saveNote: (n: Note) => Promise<void>;
   deleteJournal: (id: string) => void;
@@ -66,6 +69,30 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     if (error) throw new Error("Could not save this note. Check your connection and try again.");
   }, []);
 
+  const createNotebook = useCallback(async (name: string) => {
+    const clean = name.trim().replace(/\s+/g, " ");
+    if (!clean || clean.length > 80) throw new Error("Notebook names must be 1 to 80 characters.");
+    if (notebooks.some((n) => n.name.toLocaleLowerCase() === clean.toLocaleLowerCase())) throw new Error("A notebook with that name already exists.");
+    const { data, error } = await createClient().from("notebooks").insert({ name: clean }).select("id,name").single();
+    if (error) throw new Error(error.code === "23505" ? "A notebook with that name already exists." : "Could not create the notebook. Please retry.");
+    setNotebooks((all) => [...all, data].sort((a, b) => a.name.localeCompare(b.name)));
+  }, [notebooks]);
+  const renameNotebook = useCallback(async (id: string, name: string) => {
+    const clean = name.trim().replace(/\s+/g, " ");
+    if (!clean || clean.length > 80) throw new Error("Notebook names must be 1 to 80 characters.");
+    if (notebooks.some((n) => n.id !== id && n.name.toLocaleLowerCase() === clean.toLocaleLowerCase())) throw new Error("A notebook with that name already exists.");
+    const { data, error } = await createClient().from("notebooks").update({ name: clean }).eq("id", id).select("id,name").single();
+    if (error) throw new Error(error.code === "23505" ? "A notebook with that name already exists." : "Could not rename the notebook. Please retry.");
+    setNotebooks((all) => all.map((n) => n.id === id ? data : n).sort((a, b) => a.name.localeCompare(b.name)));
+  }, [notebooks]);
+  const deleteNotebook = useCallback(async (id: string) => {
+    const { error } = await createClient().from("notebooks").delete().eq("id", id);
+    if (error) throw new Error("Could not delete the notebook. Please retry.");
+    setNotebooks((all) => all.filter((n) => n.id !== id));
+    setJournals((all) => all.map((j) => j.notebookId === id ? { ...j, notebookId: null } : j));
+    setNotes((all) => all.map((n) => n.notebookId === id ? { ...n, notebookId: null } : n));
+  }, []);
+
   const deleteJournal = useCallback((id: string) => {
     setJournals(all => all.filter(x => x.id !== id)); setSaved(all => all.filter(x => x !== id));
     void createClient().from("journals").delete().eq("id", id).then(({ error }) => { if (error) console.error("Journal delete failed."); });
@@ -84,7 +111,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  const value = useMemo<Store>(() => ({ ready: now !== null, now: now ?? new Date(0), today: now ? toISODate(now) : "", journals, notes, notebooks, saveJournal, saveNote, deleteJournal, deleteNote, toggleSavedMemory, savedMemoryIds, newId: () => crypto.randomUUID() }), [now, journals, notes, notebooks, saveJournal, saveNote, deleteJournal, deleteNote, toggleSavedMemory, savedMemoryIds]);
+  const value = useMemo<Store>(() => ({ ready: now !== null, now: now ?? new Date(0), today: now ? toISODate(now) : "", journals, notes, notebooks, createNotebook, renameNotebook, deleteNotebook, saveJournal, saveNote, deleteJournal, deleteNote, toggleSavedMemory, savedMemoryIds, newId: () => crypto.randomUUID() }), [now, journals, notes, notebooks, createNotebook, renameNotebook, deleteNotebook, saveJournal, saveNote, deleteJournal, deleteNote, toggleSavedMemory, savedMemoryIds]);
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 

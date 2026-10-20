@@ -59,11 +59,11 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "How does NeuroMirror use AI with my journal text?",
-    a: "When you request a cognitive-language analysis, the selected journal and up to five earlier analysis summaries from your account are sent to Gemini. Other journal entries are not sent. Memory Vault search stays within your account and does not use Gemini. Your password and account tokens are never sent.",
+    a: "When you request a cognitive-language analysis, the selected journal and up to five earlier analysis summaries from your account are sent to Cloudflare Workers AI. Other journal entries are not sent. Memory Vault search stays within your account and does not use an AI provider. Your password and account tokens are never sent to the AI model.",
   },
   {
     q: "Is voice analysis available?",
-    a: "Not yet. Voice analysis is coming soon. NeuroMirror currently works with written entries only.",
+    a: "Voice quality analysis is not available. You may record a short journal entry and request a transcript. The audio is sent to Cloudflare for transcription and is not retained by NeuroMirror. Review and edit the transcript before explicitly saving it as a dated journal.",
   },
   {
     q: "Do I need to verify my email?",
@@ -82,4 +82,3 @@ export const FAQ: { q: string; a: string }[] = [
     a: "Yes. NeuroMirror is currently free to use. It may in future be supported by clearly separated, non-intrusive ads that never appear inside your writing. There is no subscription or paywall.",
   },
 ];
-

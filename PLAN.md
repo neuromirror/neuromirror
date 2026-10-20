@@ -20,7 +20,7 @@ The product surface is connected to per-user Supabase accounts and persistence. 
   - Journals **require** a date. Notes have an **optional** deadline and a completed flag. The two concepts are kept separate.
 - **Calendar**: driven only by journal dates, with a keyboard-navigable month grid. Selecting a day lists that day's journals, and "Write a Journal" opens a new journal with the date preselected. Changing a journal's date moves it on the calendar.
 - **Memory Vault** (preview): keyword retrieval with filters (date range, notebook, tag, mood, favorites) and sorting, verbatim excerpts, an honest "I couldn't find a matching memory" empty state, plus Saved memories, Timeline, and On This Day.
-- Insights now provides user-requested Gemini language analysis and per-user analysis history. Cognitive Games includes playable Sequence Recall and Pattern Match activities with per-user score history. Reports and some account settings remain future work.
+- Insights uses authenticated Supabase Edge Functions to provide user-requested Cloudflare Workers AI writing observations and per-user history. Voice journaling can optionally transcribe a short recording; audio is not retained and the transcript must be reviewed before saving. Vocal-quality analysis is unavailable. Cognitive Games includes playable Sequence Recall and Pattern Match activities with per-user score history. Reports and some account settings remain future work.
 
 The client store loads and saves only the authenticated user's records through Supabase. No sample journal data is seeded.
 
@@ -47,11 +47,11 @@ The client store loads and saves only the authenticated user's records through S
 3. Image and attachment uploads, with type and size validation and per-user private storage.
 4. Recently opened entries, and keyboard shortcuts (new journal, search).
 
-## Milestone 4 — Gemini: Memory Vault, reflection & writing assistant
+## Milestone 4 — AI: Memory Vault, reflection & writing assistant
 
-All AI calls run server-side, either through `GEMINI_API_KEY` or the Netlify AI Gateway. None run on autosave.
+All AI calls run server-side through authenticated Supabase Edge Functions using Cloudflare Workers AI and Supabase secrets. Text analysis and voice transcription require explicit user actions. No AI runs on autosave. Audio is not persisted; voice-quality analysis is unavailable.
 
-1. **Memory Vault pipeline**: authenticate → apply filters → retrieve full-text candidates from the user's own journals (top 10–20) → send only those candidates to Gemini, with a system prompt that treats journal text as untrusted data → Gemini returns structured JSON (`journal_id`, `reason`, `excerpt`) → validate the schema, check each ID against the candidate set, and check each excerpt is a verbatim substring → display. If the AI call fails, fall back to the keyword results.
+1. **Memory Vault pipeline**: authenticate → apply filters → retrieve full-text candidates from the user's own journals (top 10–20) → send only those candidates to the configured AI provider, with a system prompt that treats journal text as untrusted data → return structured JSON (`journal_id`, `reason`, `excerpt`) → validate the schema, check each ID against the candidate set, and check each excerpt is a verbatim substring → display. If the AI call fails, fall back to the keyword results.
 2. **Reflect on this**: sends only the selected journal. Returns themes, emotional themes, observations, questions, and a summary, phrased tentatively ("Your entry appears to focus on…").
 3. **AI writing assistant**: improve, rewrite, summarize, continue, reflection questions, themes, and title. Results are shown as a preview with Accept/Discard and never overwrite text automatically.
 4. Optional Home reflection based on recent entries.
@@ -62,7 +62,7 @@ All AI calls run server-side, either through `GEMINI_API_KEY` or the Netlify AI 
 
 1. Writing insights computed in SQL: frequency, average length, tag usage, and mood trend.
 2. Cognitive-language insights, generated only on request and stored in `cognitive_insights`: repetition, sentence complexity, coherence, recall language, and hesitation markers. Each comes with an explanation and the non-diagnostic disclaimer.
-3. Trend charts only where they help, each with "what this measures" text. Voice analysis stays marked Coming Soon.
+3. Trend charts only where they help, each with "what this measures" text. Vocal-quality analysis remains unavailable.
 
 ## Milestone 6 — Cognitive Games
 
