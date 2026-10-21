@@ -46,12 +46,26 @@ export function AuthForm({ mode }: { mode: Mode }) {
       if (mode === "signin") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        router.replace("/home"); router.refresh();
+        const query = new URLSearchParams(window.location.search);
+        const next = query.get("next") || "/home";
+        router.replace(next.startsWith("/") ? next : "/home");
+        router.refresh();
       } else if (mode === "signup") {
         const { data, error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;
-        if (data.session) { router.replace("/home"); router.refresh(); }
-        else setMessage("No sign-in session was returned. This email may already have an account, or Confirm email is still enabled in Supabase. For immediate sign-in after signup, turn off Confirm email under Authentication → Sign In / Providers → Email. Existing users can sign in or reset their password.");
+        if (data.session) {
+          router.replace("/home");
+          router.refresh();
+        } else {
+          // Attempt immediate sign-in in case user is auto-confirmed
+          const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
+          if (!signInErr) {
+            router.replace("/home");
+            router.refresh();
+          } else {
+            setMessage("Account created! You can now sign in with your email and password.");
+          }
+        }
       } else if (mode === "forgot") {
         const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/auth/reset-callback` });
         if (error) throw error;

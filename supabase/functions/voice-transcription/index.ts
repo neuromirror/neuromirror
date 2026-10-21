@@ -1,7 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 const corsHeaders = { "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type", "Access-Control-Allow-Methods": "POST, OPTIONS" };
 const json = (data: unknown, status = 200) => Response.json(data, { status, headers: corsHeaders });
-const mime = new Set(["audio/webm", "audio/ogg", "audio/mp4", "audio/mpeg", "audio/wav", "audio/x-wav"]);
+const mime = new Set(["audio/webm", "audio/ogg", "audio/mp4", "audio/mpeg", "audio/wav", "audio/x-wav", "audio/aac", "audio/m4a", "audio/x-m4a", "application/octet-stream"]);
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders });
   if (request.method !== "POST") return json({ error: "Use POST for this endpoint." }, 405);
@@ -10,8 +10,9 @@ Deno.serve(async (request) => {
   const client = createClient(url, anon, { global: { headers: { Authorization: bearer } }, auth: { persistSession: false, autoRefreshToken: false } });
   const { data: { user }, error } = await client.auth.getUser();
   if (error || !user) return json({ error: "Sign in to transcribe a recording." }, 401);
-  const type = (request.headers.get("Content-Type") || "").split(";")[0].toLowerCase();
-  if (!mime.has(type)) return json({ error: "Choose a supported audio recording." }, 415);
+  const rawType = request.headers.get("Content-Type") || "audio/webm";
+  const type = rawType.split(";")[0].toLowerCase().trim();
+  if (type && !mime.has(type) && !type.startsWith("audio/")) return json({ error: "Choose a supported audio recording." }, 415);
   const raw = await request.arrayBuffer().catch(() => null);
   if (!raw || raw.byteLength < 256 || raw.byteLength > 10 * 1024 * 1024) return json({ error: "Recordings must be between 256 bytes and 10 MB." }, 413);
   const { data: allowed, error: rateError } = await client.rpc("claim_voice_transcription");

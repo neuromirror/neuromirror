@@ -39,7 +39,7 @@ Deno.serve(async (request) => {
   const { data: journal, error: je } = await client.from("journals").select("id,title,content,journal_date").eq("id", journalId).single();
   if (je || !journal) return json({ error: "That journal could not be found." }, 404);
   const text = plain(journal.content);
-  if (text.length < 80) return json({ error: "Write at least a few sentences before asking for an analysis." }, 422);
+  if (text.length < 15) return json({ error: "Write or speak at least a few words before asking for an analysis." }, 422);
   if (text.length > 20000) return json({ error: "This journal is too long to analyze at once (20,000 characters maximum)." }, 413);
   const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
   const { count, error: ce } = await client.from("cognitive_insights").select("id", { count: "exact", head: true }).gte("created_at", since);

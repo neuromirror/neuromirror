@@ -1,6 +1,6 @@
 // Domain types aligned with the persisted user-owned records (see PLAN.md).
 
-export type Mood = "calm" | "happy" | "grateful" | "proud" | "tired" | "anxious" | "sad" | "reflective";
+export type Mood = "calm" | "happy" | "grateful" | "proud" | "tired" | "anxious" | "sad" | "reflective" | "energetic" | "creative";
 
 export const MOODS: { value: Mood; label: string; glyph: string }[] = [
   { value: "calm", label: "Calm", glyph: "◡" },
@@ -8,14 +8,22 @@ export const MOODS: { value: Mood; label: string; glyph: string }[] = [
   { value: "grateful", label: "Grateful", glyph: "❀" },
   { value: "proud", label: "Proud", glyph: "✦" },
   { value: "reflective", label: "Reflective", glyph: "◐" },
+  { value: "energetic", label: "Energetic", glyph: "⚡" },
+  { value: "creative", label: "Creative", glyph: "✎" },
   { value: "tired", label: "Tired", glyph: "☾" },
   { value: "anxious", label: "Anxious", glyph: "≈" },
   { value: "sad", label: "Sad", glyph: "◌" },
 ];
 
+export type PaperStyle = "plain" | "ruled" | "grid" | "parchment" | "slate" | "sepia";
+export type FontTheme = "serif" | "sans" | "mono" | "handwriting";
+export type AccentColor = "default" | "amber" | "emerald" | "violet" | "rose" | "sky";
+
 export interface Notebook {
   id: string;
   name: string;
+  color?: string;
+  description?: string;
 }
 
 interface WritingBase {
@@ -27,6 +35,10 @@ interface WritingBase {
   tags: string[];
   favorite: boolean;
   archived: boolean;
+  paperStyle?: PaperStyle;
+  fontTheme?: FontTheme;
+  accentColor?: AccentColor;
+  drawingData?: string | null;
   createdAt: string;
   updatedAt: string;
 }

@@ -69,8 +69,8 @@ export function WritingLibrary({ view, tag, notebook }: { view: WritingView; tag
           </h1>
         </div>
         <div className="flex gap-2">
-          <Link href="/writing/journal/new" className={btnPrimary}><NotebookPen className="h-4 w-4" /> New Journal</Link>
-          <Link href="/writing/note/new" className={btnGhost}><StickyNote className="h-4 w-4" /> New Note</Link>
+          <Link href={notebook ? `/writing/journal/new?notebook=${notebook}` : "/writing/journal/new"} className={btnPrimary}><NotebookPen className="h-4 w-4" /> New Journal</Link>
+          <Link href={notebook ? `/writing/note/new?notebook=${notebook}` : "/writing/note/new"} className={btnGhost}><StickyNote className="h-4 w-4" /> New Note</Link>
         </div>
       </div>
 

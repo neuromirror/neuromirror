@@ -81,7 +81,75 @@ body {
   background: var(--paper);
 }
 
-/* Faint paper grain on a fixed, non-interactive layer. */
+/* Personalization Paper Textures & Styles */
+.paper-plain {
+  background-color: var(--card);
+}
+
+.paper-ruled {
+  background-color: var(--card);
+  background-image: repeating-linear-gradient(transparent, transparent 31px, var(--line) 31px, var(--line) 32px);
+  background-attachment: local;
+  line-height: 32px;
+}
+
+.paper-grid {
+  background-color: var(--card);
+  background-image: radial-gradient(var(--line-2) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+}
+
+.paper-parchment {
+  background-color: #faf6ed !important;
+  color: #2a241e !important;
+  border-color: #e6dcce !important;
+}
+.dark .paper-parchment {
+  background-color: #26221c !important;
+  color: #ede2d3 !important;
+  border-color: #3d352b !important;
+}
+
+.paper-slate {
+  background-color: #1a1e24 !important;
+  color: #e2e8f0 !important;
+  border-color: #2d3748 !important;
+}
+.dark .paper-slate {
+  background-color: #111418 !important;
+  color: #e2e8f0 !important;
+  border-color: #232a35 !important;
+}
+
+.paper-sepia {
+  background-color: #f7f0e6 !important;
+  color: #382c1e !important;
+  border-color: #dec8b3 !important;
+}
+.dark .paper-sepia {
+  background-color: #241d16 !important;
+  color: #edd9c7 !important;
+  border-color: #3f3224 !important;
+}
+
+/* Typography styles */
+.font-theme-serif {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+.font-theme-sans {
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.font-theme-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.font-theme-handwriting {
+  font-family: var(--font-display), cursive, serif;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
 .grain::before {
   content: "";
   position: fixed;

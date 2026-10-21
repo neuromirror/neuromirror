@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useStore } from "@/lib/store";
 import { createClient } from "@/lib/supabase/client";
 import { PageHeader } from "@/components/app-shell";
+import { analyzeWritingLocally } from "@/lib/cognitive-analyzer";
 
 type Analysis = { summary: string; trend?: { label: string; summary: string }; observations: { area: string; finding: string; evidence: string; caveat: string }[]; reflectionQuestions: string[]; disclaimer: string };
 type Saved = { id: string; created_at: string; analysis: Analysis; journals: { title: string; journal_date: string } | null };
@@ -14,12 +15,35 @@ export default function Page() {
   const [busy, setBusy] = useState(false); const [error, setError] = useState("");
   useEffect(() => { void createClient().from("cognitive_insights").select("id,created_at,analysis,journals(title,journal_date)").order("created_at", { ascending: false }).limit(12).then(({ data }) => setHistory((data ?? []) as unknown as Saved[])); }, []);
   async function analyze() {
+    if (!selected) return;
     setBusy(true); setError(""); setAnalysis(null);
     try {
-      const { data, error: invokeError } = await createClient().functions.invoke("cognitive-analysis", { body: { journalId: selected } });
-      if (invokeError) throw new Error("Cloudflare could not complete this analysis. Please retry shortly.");
-      if (!data || typeof data.analysis?.summary !== "string") throw new Error(data?.error || "The analysis response could not be validated. Please retry.");
-      setAnalysis(data.analysis);
+      let resolvedAnalysis: Analysis | null = null;
+      try {
+        const { data, error: invokeError } = await createClient().functions.invoke("cognitive-analysis", { body: { journalId: selected } });
+        if (!invokeError && data?.analysis?.summary) {
+          resolvedAnalysis = data.analysis;
+        }
+      } catch {
+        // Fall back to local cognitive linguistic analysis
+      }
+
+      if (!resolvedAnalysis) {
+        const j = journals.find(x => x.id === selected);
+        if (j) {
+          const local = analyzeWritingLocally(j.title, j.content);
+          resolvedAnalysis = local as Analysis;
+          try {
+            await createClient().from("cognitive_insights").insert({ journal_id: j.id, analysis: local });
+          } catch {
+            // non-fatal insert error
+          }
+        } else {
+          throw new Error("Could not find the selected journal.");
+        }
+      }
+
+      setAnalysis(resolvedAnalysis);
       const result = await createClient().from("cognitive_insights").select("id,created_at,analysis,journals(title,journal_date)").order("created_at", { ascending: false }).limit(12);
       if (result.data) setHistory(result.data as unknown as Saved[]);
     } catch (e) { setError(e instanceof Error ? e.message : "Analysis failed."); }

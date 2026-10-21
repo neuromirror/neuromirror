@@ -12,7 +12,7 @@ import { CharacterCount, Placeholder } from "@tiptap/extensions";
 import { useState } from "react";
 import {
   AlignCenter, AlignLeft, AlignRight, Bold, Heading1, Heading2, Highlighter, Image as ImageIcon, Italic, Link as LinkIcon,
-  List, ListChecks, ListOrdered, Pilcrow, Quote, Redo2, RemoveFormatting, Strikethrough, Table, Underline, Undo2,
+  List, ListChecks, ListOrdered, PenTool, Pilcrow, Quote, Redo2, RemoveFormatting, Strikethrough, Table, Underline, Undo2,
 } from "lucide-react";
 import { readingMinutes } from "@/lib/text";
 
@@ -30,10 +30,12 @@ export function RichEditor({
   initial,
   placeholder,
   onChange,
+  onOpenDrawing,
 }: {
   initial: string;
   placeholder: string;
   onChange: (html: string, stats: EditorStats) => void;
+  onOpenDrawing?: () => void;
 }) {
   const [stats, setStats] = useState<EditorStats>({ words: 0, characters: 0 });
 
@@ -56,7 +58,7 @@ export function RichEditor({
       TaskList,
       TaskItem.configure({ nested: true }),
       TableKit.configure({ table: { resizable: false } }),
-      ImageExt.configure({ allowBase64: false }),
+      ImageExt.configure({ allowBase64: true }),
       Placeholder.configure({ placeholder }),
       CharacterCount,
     ],
@@ -74,7 +76,7 @@ export function RichEditor({
 
   return (
     <div>
-      {editor && <Toolbar editor={editor} />}
+      {editor && <Toolbar editor={editor} onOpenDrawing={onOpenDrawing} />}
       <div className="mt-6">
         <EditorContent editor={editor} />
       </div>
@@ -115,7 +117,7 @@ function Btn({ label, active, disabled, onClick, children }: {
 
 const Sep = () => <span className="mx-1 h-5 w-px shrink-0 bg-line" aria-hidden />;
 
-function Toolbar({ editor }: { editor: Editor }) {
+function Toolbar({ editor, onOpenDrawing }: { editor: Editor; onOpenDrawing?: () => void }) {
   const [prompt, setPrompt] = useState<null | "link" | "image">(null);
   const [url, setUrl] = useState("");
   const [err, setErr] = useState<string | null>(null);
@@ -136,7 +138,7 @@ function Toolbar({ editor }: { editor: Editor }) {
       else if (!/^(https?:\/\/|mailto:)/i.test(v) && /^[a-z][a-z0-9+.-]*:/i.test(v)) return setErr("Only web and email links are allowed.");
       else c().extendMarkRange("link").setLink({ href: /^(https?:|mailto:)/i.test(v) ? v : `https://${v}` }).run();
     } else if (prompt === "image") {
-      if (!/^https:\/\/\S+$/i.test(v)) return setErr("Use an https:// image address.");
+      if (!/^(https:\/\/|data:image\/)\S+$/i.test(v)) return setErr("Use an https:// image address or valid image data.");
       c().setImage({ src: v, alt: "" }).run();
     }
     setPrompt(null);
@@ -171,6 +173,9 @@ function Toolbar({ editor }: { editor: Editor }) {
         <Btn label="Align right" active={editor.isActive({ textAlign: "right" })} onClick={() => c().setTextAlign("right").run()}><AlignRight className={ic} /></Btn>
         <Sep />
         <Btn label="Insert table" active={inTable} onClick={() => c().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}><Table className={ic} /></Btn>
+        {onOpenDrawing && (
+          <Btn label="Stylus / Freeform Drawing" onClick={onOpenDrawing}><PenTool className={`${ic} text-accent`} /></Btn>
+        )}
         <Btn label="Insert image from link" onClick={() => openPrompt("image")}><ImageIcon className={ic} /></Btn>
         <Btn label="Clear formatting" onClick={() => c().unsetAllMarks().clearNodes().run()}><RemoveFormatting className={ic} /></Btn>
       </div>
