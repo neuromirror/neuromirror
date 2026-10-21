@@ -89,7 +89,7 @@ export function FreeformCanvas({
 
     // Pattern / guidelines
     if (background === "ruled") {
-      ctx.strokeStyle = background === "dark" ? "rgba(255,255,255,0.07)" : "rgba(59, 130, 246, 0.12)";
+      ctx.strokeStyle = "rgba(59, 130, 246, 0.12)";
       ctx.lineWidth = 1 * dpr;
       const lineSpacing = 32 * dpr;
       for (let y = lineSpacing; y < height; y += lineSpacing) {
@@ -99,7 +99,7 @@ export function FreeformCanvas({
         ctx.stroke();
       }
     } else if (background === "grid") {
-      ctx.fillStyle = background === "dark" ? "rgba(255,255,255,0.15)" : "rgba(100, 116, 139, 0.25)";
+      ctx.fillStyle = "rgba(100, 116, 139, 0.25)";
       const dotSpacing = 24 * dpr;
       const dotRadius = 1.2 * dpr;
       for (let x = dotSpacing; x < width; x += dotSpacing) {
