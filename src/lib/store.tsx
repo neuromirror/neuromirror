@@ -216,7 +216,5 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
-  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
-}
 
 export function useStore() { const s = useContext(Ctx); if (!s) throw new Error("useStore must be used inside StoreProvider"); return s; }
