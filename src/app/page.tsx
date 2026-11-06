@@ -6,6 +6,7 @@ import { ThemeSwitch } from "@/components/theme-switch";
 import { FAQ } from "@/lib/content/faq";
 import { SITE } from "@/lib/site";
 import { AdSenseLoader } from "@/components/adsense-loader";
+import { AdSenseUnit } from "@/components/adsense-unit";
 
 export const metadata: Metadata = {
   title: { absolute: SITE.title },
@@ -126,10 +127,11 @@ export default function Landing() {
       <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
         <Logo />
         <nav aria-label="Primary" className="flex items-center gap-1 sm:gap-5">
-          <a href="#about" className="hidden text-sm text-ink-2 hover:text-ink md:inline">About</a>
+          <Link href="/about" className="hidden text-sm text-ink-2 hover:text-ink md:inline">About</Link>
+          <Link href="/blog" className="hidden text-sm text-ink-2 hover:text-ink md:inline">Blog</Link>
           <a href="#how-it-works" className="hidden text-sm text-ink-2 hover:text-ink md:inline">How it works</a>
-          <a href="#privacy" className="hidden text-sm text-ink-2 hover:text-ink md:inline">Privacy</a>
-          <a href="#faq" className="hidden text-sm text-ink-2 hover:text-ink md:inline">FAQ</a>
+          <Link href="/terms" className="hidden text-sm text-ink-2 hover:text-ink md:inline">Terms</Link>
+          <Link href="/privacy" className="hidden text-sm text-ink-2 hover:text-ink md:inline">Privacy</Link>
           <span className="hidden sm:inline"><ThemeSwitch compact /></span>
           <Link href="/signin" className="rounded-full px-3 py-2 text-sm text-ink hover:bg-paper-2">Sign In</Link>
         </nav>
@@ -326,6 +328,35 @@ export default function Landing() {
           </div>
         </section>
 
+        {/* AdSense Unit on Landing Page */}
+        <section className="mx-auto max-w-4xl px-5 sm:px-8">
+          <AdSenseUnit slot="landing-mid-ad" />
+        </section>
+
+        {/* Platform Integrity & Trust Metrics */}
+        <section className="border-t border-line bg-paper-2/50 py-16">
+          <div className="mx-auto max-w-6xl px-5 sm:px-8">
+            <div className="grid grid-cols-2 gap-6 md:grid-cols-4 text-center">
+              <div>
+                <p className="font-display text-3xl font-semibold text-ink sm:text-4xl">100%</p>
+                <p className="mt-1 text-xs text-ink-3">PostgreSQL RLS Scoped Privacy</p>
+              </div>
+              <div>
+                <p className="font-display text-3xl font-semibold text-ink sm:text-4xl">0</p>
+                <p className="mt-1 text-xs text-ink-3">Private Journals Used to Train AI</p>
+              </div>
+              <div>
+                <p className="font-display text-3xl font-semibold text-ink sm:text-4xl">10 / hr</p>
+                <p className="mt-1 text-xs text-ink-3">Protected Fair-Use Analysis Limit</p>
+              </div>
+              <div>
+                <p className="font-display text-3xl font-semibold text-ink sm:text-4xl">Whisper</p>
+                <p className="mt-1 text-xs text-ink-3">Serverless Ephemeral Voice Dictation</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
         <section className="mx-auto max-w-6xl px-5 pb-24 sm:px-8">
           <div className="rounded-lg bg-ink px-8 py-16 text-center text-paper sm:px-16">
@@ -333,9 +364,14 @@ export default function Landing() {
             <p className="mx-auto mt-4 max-w-lg font-serif text-lg opacity-80">
               Write something today. Find it again whenever you need it.
             </p>
-            <Link href="/signup" className="mt-8 inline-flex items-center gap-2 rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink">
-              Get Started <ArrowRight className="h-4 w-4" aria-hidden />
-            </Link>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Link href="/signup" className="inline-flex items-center gap-2 rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink">
+                Get Started <ArrowRight className="h-4 w-4" aria-hidden />
+              </Link>
+              <Link href="/blog" className="rounded-full border border-paper/40 px-6 py-3 text-sm font-medium text-paper hover:bg-paper/10">
+                Explore Our Blog
+              </Link>
+            </div>
           </div>
         </section>
       </main>
@@ -347,7 +383,13 @@ export default function Landing() {
             NeuroMirror provides informational writing observations only. It is not a medical device and does not diagnose,
             treat, or prevent any condition. © {new Date().getFullYear()} NeuroMirror.
           </p>
-          <Link href="/privacy" className="hover:text-ink">Privacy</Link>
+          <div className="flex flex-wrap gap-4">
+            <Link href="/about" className="hover:text-ink">About</Link>
+            <Link href="/blog" className="hover:text-ink">Blog</Link>
+            <Link href="/terms" className="hover:text-ink">Terms</Link>
+            <Link href="/privacy" className="hover:text-ink">Privacy</Link>
+            <Link href="/partners" className="hover:text-ink">Investors</Link>
+          </div>
         </div>
       </footer>
     </>
