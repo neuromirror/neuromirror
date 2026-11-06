@@ -89,6 +89,18 @@ export function EntryEditor({ kind, id, presetDate, presetNotebook }: { kind: "j
   const persisted = useRef(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Prevent accidental data loss if user closes tab while draft is unsaved
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (status === "dirty" || status === "saving") {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [status]);
+
   // Initialise the draft once the store is ready.
   useEffect(() => {
     if (!store.ready || draftRef.current) return;
