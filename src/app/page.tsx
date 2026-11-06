@@ -295,7 +295,7 @@ export default function Landing() {
               <li>Journals and notes are private to your account, protected by authenticated access and database-level security rules.</li>
               <li>There are no public journal pages, and private pages are never indexed by search engines.</li>
               <li>AI runs only when you ask, from our server, with only the text the feature needs.</li>
-              <li>You can delete individual journals and notes. Account-wide deletion is not self-service yet; see the <Link href="/privacy" className="underline underline-offset-4">privacy page</Link> to request account removal. Data export is not available yet.</li>
+              <li>You have full data sovereignty: 1-click complete data export (JSON and readable Markdown) and self-service account data erasure are available right inside Settings.</li>
             </ul>
           </div>
           <div className="rounded-lg border border-line p-8">
