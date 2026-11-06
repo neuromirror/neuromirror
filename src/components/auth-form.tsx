@@ -139,6 +139,18 @@ export function AuthForm({ mode }: { mode: Mode }) {
         <div className="flex items-center gap-3 text-xs text-ink-3"><span className="h-px flex-1 bg-line" />or<span className="h-px flex-1 bg-line" /></div>
         <button type="button" disabled={busy} onClick={signInWithGoogle} className="flex w-full items-center justify-center gap-2 rounded-full border border-line-2 bg-card py-3 text-sm text-ink hover:bg-paper-2 disabled:opacity-60"><span aria-hidden className="font-semibold">G</span> Continue with Google</button>
       </>}
+      {mode === "signup" && (
+        <p className="mt-4 text-center text-xs text-ink-3">
+          By signing up, you agree to our{" "}
+          <Link href="/terms" className="text-ink underline underline-offset-2">
+            Terms & Conditions
+          </Link>{" "}
+          and{" "}
+          <Link href="/privacy" className="text-ink underline underline-offset-2">
+            Privacy Policy
+          </Link>.
+        </p>
+      )}
     </form>}
     <p className="mt-8 text-sm text-ink-3">{mode === "signup" ? <>Already have an account? <Link href="/signin" className="text-ink underline underline-offset-4">Sign In</Link></> : mode === "signin" ? <>New to NeuroMirror? <Link href="/signup" className="text-ink underline underline-offset-4">Get Started</Link></> : <Link href="/signin" className="text-ink underline underline-offset-4">Back to Sign In</Link>}</p>
   </div>;
