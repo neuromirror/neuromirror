@@ -40,7 +40,7 @@ export function DataManager() {
         })),
         notebooks: notebooks.map((nb) => ({
           id: nb.id,
-          title: nb.title,
+          name: nb.name,
         })),
       };
 
