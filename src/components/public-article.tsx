@@ -15,8 +15,9 @@ export function PublicArticle({ title, eyebrow, summary, children }: PublicArtic
       <header className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-5 sm:px-8">
         <Logo />
         <nav aria-label="Public pages" className="flex items-center gap-4 text-sm text-ink-2">
-          <Link href="/cognitive-health-journal" className="hover:text-ink">Cognitive health journal</Link>
-          <Link href="/memory-vault-guide" className="hidden hover:text-ink sm:inline">Memory Vault</Link>
+          <Link href="/about" className="hover:text-ink">About</Link>
+          <Link href="/blog" className="hover:text-ink">Blog</Link>
+          <Link href="/terms" className="hidden hover:text-ink sm:inline">Terms</Link>
           <Link href="/privacy" className="hidden hover:text-ink sm:inline">Privacy</Link>
         </nav>
       </header>
@@ -42,9 +43,15 @@ export function PublicArticle({ title, eyebrow, summary, children }: PublicArtic
           <Logo />
           <p className="max-w-xl text-xs leading-relaxed text-ink-3">
             NeuroMirror offers optional, informational observations about writing. It is not a medical device and does not
-            diagnose or treat any condition.
+            diagnose or treat any condition. © {new Date().getFullYear()} NeuroMirror.
           </p>
-          <Link href="/" className="text-ink-2 underline underline-offset-4">About NeuroMirror</Link>
+          <div className="flex flex-wrap gap-4 text-xs text-ink-3">
+            <Link href="/about" className="hover:text-ink">About</Link>
+            <Link href="/blog" className="hover:text-ink">Blog</Link>
+            <Link href="/terms" className="hover:text-ink">Terms</Link>
+            <Link href="/privacy" className="hover:text-ink">Privacy</Link>
+            <Link href="/partners" className="hover:text-ink">Investors</Link>
+          </div>
         </div>
       </footer>
     </>
