@@ -7,67 +7,84 @@ import {
   TrendingUp,
   ShieldCheck,
   Brain,
-  Users,
   Lock,
   ArrowRight,
   Database,
-  BarChart3,
-  Globe,
-  FileSpreadsheet,
-  Award,
+  CheckCircle2,
+  AlertTriangle,
+  Zap,
+  RefreshCw,
+  Cpu,
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Investors & Partners – NeuroMirror",
+  title: "Platform Audit & Due Diligence – NeuroMirror",
   description:
-    "Explore the NeuroMirror investment thesis, market opportunity in cognitive health longevity, multi-tiered monetization, and clinical research partnership opportunities.",
+    "An investor-grade due-diligence audit of NeuroMirror. Review architectural weaknesses identified, security loopholes fixed, 100% free access model, and data sovereignty safeguards.",
   alternates: { canonical: "/partners" },
 };
 
 const STATS = [
-  { value: "$15.8B", label: "Projected Cognitive Longevity & Wellness Market by 2030" },
-  { value: "100%", label: "Private PostgreSQL Row-Level Security (RLS) Isolation" },
-  { value: "0", label: "Zero Public AI Training on Sensitive User Journals" },
-  { value: "3 Tiers", label: "Diversified Revenue: AdSense, Pro SaaS, and Family Plans" },
+  { value: "100% Free", label: "Zero Subscriptions, Paywalls, or Gated Features" },
+  { value: "100%", label: "PostgreSQL Row-Level Security (RLS) Isolation" },
+  { value: "0", label: "User Journals Used for Public AI Model Training" },
+  { value: "1-Click", label: "Complete Data Portability (JSON & Markdown Export)" },
 ];
 
-const MONETIZATION_TIERS = [
+const AUDIT_FIXES = [
   {
-    name: "Free & AdSense Supported",
-    price: "$0",
-    description: "Public educational content, blog, and standard private journaling.",
-    features: [
-      "Distraction-free rich journal & note editor",
-      "Instant Memory Vault keyword search",
-      "Tactile paper styles and theme customization",
-      "Monetized via Google AdSense on public editorial pages",
-    ],
-    highlight: false,
+    icon: Zap,
+    title: "Vulnerability 1: TOCTOU Concurrency Race Conditions",
+    weakness:
+      "Parallel API requests could flood edge functions simultaneously before database counts updated, bypassing hourly quotas and burning external inference compute.",
+    remediation:
+      "Implemented PostgreSQL transactional advisory locking (`pg_advisory_xact_lock`) on the user UUID hash and an atomic pre-claim reservation ledger (`cognitive_analysis_requests`) that deducts quota before invoking Cloudflare AI.",
+    status: "Hardened & Enforced",
   },
   {
-    name: "NeuroMirror Pro",
-    price: "$9.99 / mo",
-    description: "For active self-reflectors and individuals tracking personal cognitive baselines.",
-    features: [
-      "Expanded Cloudflare Workers AI cognitive observations",
-      "Full Whisper voice journaling transcription",
-      "Longitudinal lexical diversity & syntactic trend curves",
-      "Exportable Clinical PDF summary packets for doctor visits",
-      "Custom introspective reflection prompt library",
-    ],
-    highlight: true,
+    icon: Database,
+    title: "Vulnerability 2: Vendor Lock-in & GDPR Portability Risk",
+    weakness:
+      "Lack of self-service data export created switching friction, legal risk under GDPR Article 20, and user hesitation to commit personal entries.",
+    remediation:
+      "Engineered a 1-click self-service Data Manager in Settings allowing instant export to structured JSON and readable Markdown (.md), plus verified self-service data erasure.",
+    status: "Implemented & Verified",
   },
   {
-    name: "Family & Caregiver Circle",
-    price: "$19.99 / mo",
-    description: "Generational memory preservation for families and assisted living.",
-    features: [
-      "Shared family memory vault with permission controls",
-      "Oral history voice recording and automated archival",
-      "Collaborative life chapters and heirloom export",
-      "Caregiver observation digest with consent scoping",
-    ],
-    highlight: false,
+    icon: ShieldCheck,
+    title: "Vulnerability 3: Regulatory & Medical Device Liability",
+    weakness:
+      "Ambiguous language in AI health apps risks triggering FDA 510(k) medical device classification or user anxiety over false clinical diagnoses.",
+    remediation:
+      "Enforced a strict non-diagnostic cognitive linguistic model: no clinical scores, no risk probabilities. Framing is strictly focused on observable writing patterns for mindful self-reflection.",
+    status: "Compliant & De-risked",
+  },
+  {
+    icon: RefreshCw,
+    title: "Vulnerability 4: AI Provider Downtime & Single-Point-of-Failure",
+    weakness:
+      "Reliance on third-party serverless inference could leave the user stranded with a broken UI if the model API is rate-limited or offline.",
+    remediation:
+      "Built resilient tiered fallbacks: local in-browser heuristic linguistic analysis (`analyzeWritingLocally`) and native Web Speech API dictation when cloud Whisper is unreachable.",
+    status: "Resilient & Offline-Ready",
+  },
+  {
+    icon: Cpu,
+    title: "Vulnerability 5: Prompt Delimiter & Unbounded Payload Injection",
+    weakness:
+      "Unsanitized journal text sent to LLM endpoints could permit prompt leakage, delimiter injection, or excessive compute denial-of-service.",
+    remediation:
+      "Enforced strict 20,000-character payload bounds, stripped invisible ASCII control sequences, and isolated user text in structured JSON parameter blocks.",
+    status: "Sanitized & Guarded",
+  },
+  {
+    icon: Brain,
+    title: "Vulnerability 6: Cold-Start Writer's Block & Day-1 Churn",
+    weakness:
+      "Users entering a completely empty journal stare at a blank screen, leading to high initial drop-off before personal baselines can be established.",
+    remediation:
+      "Integrated structured cognitive prompts (sensory grounding, episodic memory, emotional reframing) directly into the editor for 1-click inspiration.",
+    status: "Integrated in Editor",
   },
 ];
 
@@ -86,6 +103,9 @@ export default function PartnersPage() {
           <Link href="/blog" className="text-sm text-ink-2 hover:text-ink">
             Blog
           </Link>
+          <Link href="/terms" className="text-sm text-ink-2 hover:text-ink">
+            Terms
+          </Link>
           <ThemeSwitch compact />
           <Link
             href="/signup"
@@ -100,19 +120,19 @@ export default function PartnersPage() {
         {/* Hero */}
         <section className="max-w-3xl">
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-accent font-semibold">
-            <TrendingUp className="h-4 w-4" /> Investor & Partner Overview
+            <TrendingUp className="h-4 w-4" /> Due Diligence & Technical Audit
           </div>
           <h1 className="mt-4 font-display text-4xl text-ink sm:text-5xl lg:text-6xl leading-tight">
-            The future of cognitive longevity starts with daily reflection.
+            Fixing weaknesses to build an enduring platform.
           </h1>
           <p className="mt-6 font-serif text-lg leading-relaxed text-ink-2 sm:text-xl">
-            NeuroMirror is building the definitive writing-led cognitive wellness platform. By
-            combining private daily journaling with longitudinal computational linguistics, we
-            create an enduring personal baseline for human cognition.
+            A thorough technical and product audit of NeuroMirror. We systematically identified the
+            operational, architectural, and security vulnerabilities of our site and engineered
+            comprehensive solutions to resolve them.
           </p>
         </section>
 
-        {/* Key Metrics / Highlights Grid */}
+        {/* Metrics Grid */}
         <section className="mt-12 grid grid-cols-2 gap-4 lg:grid-cols-4">
           {STATS.map((s) => (
             <div key={s.label} className="rounded-xl border border-line bg-card p-6 text-center">
@@ -122,136 +142,107 @@ export default function PartnersPage() {
           ))}
         </section>
 
-        {/* Investment Thesis */}
+        {/* 100% Free Philosophy */}
         <section className="mt-16 rounded-xl border border-line bg-paper-2/60 p-8 sm:p-12">
-          <h2 className="font-display text-3xl text-ink">The Investment Thesis</h2>
-          <div className="mt-6 grid gap-8 md:grid-cols-3">
-            <div>
-              <h3 className="font-display text-lg text-ink flex items-center gap-2">
-                <Brain className="h-5 w-5 text-accent" /> Massive Demographic Tailwinds
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-2 font-serif">
-                Over 55 million people worldwide live with cognitive changes, projected to reach 139
-                million by 2050. Proactive self-monitoring and memory preservation are moving from
-                niche wellness to mainstream healthcare priorities.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-display text-lg text-ink flex items-center gap-2">
-                <ShieldCheck className="h-5 w-5 text-accent" /> Zero Regulatory Friction
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-2 font-serif">
-                By intentionally positioning NeuroMirror as an informational, non-diagnostic
-                reflective companion, we avoid protracted FDA 510(k) medical device clearance cycles
-                while maintaining complete consumer trust and high organic adoption.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-display text-lg text-ink flex items-center gap-2">
-                <Lock className="h-5 w-5 text-accent" /> Unmatched Data Moat & Retention
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-2 font-serif">
-                A user&apos;s personal baseline becomes exponentially more valuable with each passing
-                month. Switching costs grow organically, establishing industry-leading retention
-                and lifetime value (LTV).
-              </p>
-            </div>
+          <h2 className="font-display text-3xl text-ink">Why NeuroMirror is 100% Free</h2>
+          <div className="mt-6 space-y-4 font-serif text-base text-ink-2 leading-relaxed">
+            <p>
+              We believe cognitive health journaling should never be locked behind subscriptions,
+              paywalls, or credit card requirements. Mental self-reflection and personal memory
+              preservation are fundamental human needs.
+            </p>
+            <p>
+              <strong>The Sustainable Model:</strong> NeuroMirror sustains its infrastructure purely
+              through non-intrusive Google AdSense advertising on public educational articles and
+              guides. All private app features—dated journals, Memory Vault, voice dictation, canvas
+              drawing, and cognitive linguistic observations—remain <strong>100% free</strong> for
+              every user.
+            </p>
           </div>
         </section>
 
-        {/* Business Model & Monetization Tiers */}
+        {/* Technical Audit & Weaknesses Fixed */}
         <section className="mt-20">
-          <div className="text-center max-w-2xl mx-auto">
-            <p className="text-xs uppercase tracking-[0.22em] text-ink-3">Unit Economics</p>
+          <div className="max-w-3xl">
+            <p className="text-xs uppercase tracking-[0.22em] text-ink-3">Architectural Hardening</p>
             <h2 className="mt-3 font-display text-3xl text-ink sm:text-4xl">
-              Scalable, High-Margin Monetization
+              Platform Weaknesses Identified & Remediated
             </h2>
             <p className="mt-3 text-sm text-ink-2">
-              A balanced revenue model blending immediate ad-supported traffic monetization with
-              recurring high-margin SaaS subscriptions.
+              Every system vulnerability and UX friction point identified during our due diligence
+              review has been engineered and deployed to production.
             </p>
           </div>
 
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
-            {MONETIZATION_TIERS.map((tier) => (
-              <div
-                key={tier.name}
-                className={`relative rounded-xl border p-7 flex flex-col justify-between ${
-                  tier.highlight
-                    ? "border-accent bg-card shadow-soft ring-1 ring-accent"
-                    : "border-line bg-card"
-                }`}
-              >
-                {tier.highlight && (
-                  <span className="absolute -top-3 left-6 rounded-full bg-accent px-3 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
-                    Primary Growth Driver
-                  </span>
-                )}
-                <div>
-                  <h3 className="font-display text-xl text-ink">{tier.name}</h3>
-                  <div className="mt-4 flex items-baseline gap-1">
-                    <span className="font-display text-3xl text-ink font-semibold">
-                      {tier.price}
-                    </span>
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {AUDIT_FIXES.map((fix) => {
+              const Icon = fix.icon;
+              return (
+                <div key={fix.title} className="rounded-xl border border-line bg-card p-6 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <Icon className="h-5 w-5 text-accent" />
+                      <span className="rounded-full bg-accent/15 px-2.5 py-0.5 text-[11px] font-semibold text-accent">
+                        {fix.status}
+                      </span>
+                    </div>
+                    <h3 className="mt-4 font-display text-lg text-ink">{fix.title}</h3>
+                    <div className="mt-3 space-y-2 text-xs leading-relaxed">
+                      <p className="text-ink-3">
+                        <strong className="text-clay">Identified Weakness:</strong> {fix.weakness}
+                      </p>
+                      <p className="text-ink-2 font-serif text-sm">
+                        <strong className="text-accent font-sans text-xs">Engineered Fix:</strong>{" "}
+                        {fix.remediation}
+                      </p>
+                    </div>
                   </div>
-                  <p className="mt-3 text-xs text-ink-2">{tier.description}</p>
-                  <ul className="mt-6 space-y-2.5 text-xs text-ink-2">
-                    {tier.features.map((feat) => (
-                      <li key={feat} className="flex items-start gap-2">
-                        <span className="text-accent font-bold">✓</span> {feat}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
-        {/* Research & Clinical Collaboration */}
+        {/* Research Collaboration Section */}
         <section className="mt-20 border-t border-line pt-16">
           <div className="grid gap-10 lg:grid-cols-2 items-center">
             <div>
-              <p className="text-xs uppercase tracking-[0.22em] text-ink-3">Academic Partnerships</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-ink-3">Open Collaboration</p>
               <h2 className="mt-3 font-display text-3xl text-ink">
-                Clinical Research & University Collaborations
+                Academic & Clinical Inquiries
               </h2>
               <p className="mt-4 font-serif text-base leading-relaxed text-ink-2">
-                We actively collaborate with cognitive neurology departments, psycholinguistics labs,
-                and digital health researchers investigating early linguistic indicators of
-                executive changes.
+                We welcome inquiries from cognitive linguistics departments, memory clinics, and
+                digital health researchers studying writing-led cognitive longevity.
               </p>
-              <p className="mt-3 font-serif text-base leading-relaxed text-ink-2">
-                Our infrastructure provides aggregated, strictly anonymized linguistic telemetry
-                with explicit participant consent — accelerating longitudinal research without
-                compromising individual privacy.
-              </p>
-            </div>
-            <div className="rounded-xl border border-line bg-card p-8">
-              <h3 className="font-display text-xl text-ink">Inquire for Collaboration</h3>
-              <p className="mt-2 text-xs text-ink-2">
-                For angel investors, institutional venture funds, and academic research inquiries:
-              </p>
-              <div className="mt-6 space-y-3 text-sm">
+              <div className="mt-6 space-y-2 text-sm text-ink-2">
                 <p>
-                  <strong>Executive Contact:</strong>{" "}
+                  <strong>Contact:</strong>{" "}
                   <a
-                    href="mailto:contact@neuromirror.in?subject=Investor%20%2F%20Partner%20Inquiry"
+                    href="mailto:contact@neuromirror.in"
                     className="text-accent underline underline-offset-4"
                   >
                     contact@neuromirror.in
                   </a>
                 </p>
                 <p>
-                  <strong>Location:</strong> Bengaluru, India · Global Cloud Infrastructure
+                  <strong>Location:</strong> Bengaluru, India · Cloudflare Global Edge
                 </p>
               </div>
-              <a
-                href="mailto:contact@neuromirror.in?subject=Investor%20%2F%20Partner%20Inquiry"
+            </div>
+
+            <div className="rounded-xl border border-line bg-card p-8 text-center">
+              <ShieldCheck className="mx-auto h-10 w-10 text-accent" />
+              <h3 className="mt-4 font-display text-xl text-ink">Experience NeuroMirror</h3>
+              <p className="mt-2 text-xs text-ink-2 font-serif">
+                A private, hardened, 100% free journal built around cognitive-language awareness.
+              </p>
+              <Link
+                href="/signup"
                 className="mt-6 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-2.5 text-xs font-medium text-paper hover:opacity-90"
               >
-                Request Investor Deck & Data Room <ArrowRight className="h-3.5 w-3.5" />
-              </a>
+                Create Free Journal Account <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
           </div>
         </section>
@@ -278,7 +269,7 @@ export default function PartnersPage() {
               Blog
             </Link>
             <Link href="/partners" className="hover:text-ink">
-              Investors
+              Platform Audit
             </Link>
           </div>
         </div>
